@@ -10,12 +10,6 @@ class Day1
   end
 
   def compute_part_1!
-    compute_number_of_deeper_sonar_bips(data: data)
-  end
-
-  private
-
-  def compute_number_of_deeper_sonar_bips(data:)
     result =
       data.each_with_object({ last_value: data.first, times: 0 }) do |depth, hash|
         hash[:times] += 1 if deeper?(current: depth, previous: hash[:last_value])
@@ -25,38 +19,19 @@ class Day1
     result[:times]
   end
 
-  def deeper?(current:, previous:)
-    current > previous
-  end
+  def compute_part_2!
+    acc = { last_sum: data[0..2].sum, times: 0 }
 
-  def load_data
-    File.open('./day_1.txt').readlines.map(&:chomp).map(&:to_i)
-  end
-end
-
-class Day1Part2
-  attr_reader :data
-
-  def initialize(data: load_data)
-    @data = data
-  end
-
-  def compute!
-    compute_number_of_deeper_sonar_bips(data: data)
-  end
-
-  private
-
-  def compute_number_of_deeper_sonar_bips(data:)
-    acc = { last_sum: nil, times: 0 }
     data.each_with_index do |_, index|
-      three_depths = data[index..index+2]
-      acc[:times] += 1 if acc[:last_sum] && deeper?(current: three_depths.sum, previous: acc[:last_sum])
+      three_depths = data[index..index + 2]
+      acc[:times] += 1 if deeper?(current: three_depths.sum, previous: acc[:last_sum])
       acc[:last_sum] = three_depths.sum
     end
 
     acc[:times]
   end
+
+  private
 
   def deeper?(current:, previous:)
     current > previous

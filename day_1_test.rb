@@ -11,6 +11,6 @@ class Day1Test < MiniTest::Test
   end
 
   def test_returns_five_for_the_given_data
-    Day1Part2.new(data: DATA).compute!
+    Day1.new(data: DATA).compute_part_2!
   end
 end
