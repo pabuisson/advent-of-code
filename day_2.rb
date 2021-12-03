@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
-class Day2
-  attr_reader :data
+require './advent_day.rb'
 
-  def initialize(data: load_data)
-    @data = format_data(data)
-  end
+class Day2 < AdventDay
 
   def part_1_position
     position = Position.new
@@ -28,14 +25,6 @@ class Day2
   end
 
   private
-
-  def format_data(data)
-    data.readlines.map(&:chomp)
-  end
-
-  def load_data
-    File.open('./day_2.txt')
-  end
 
   class Position
     attr_reader :x, :depth
