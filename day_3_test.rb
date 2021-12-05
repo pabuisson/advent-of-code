@@ -27,7 +27,7 @@ class Day3Test < MiniTest::Test
     assert_equal 198, Day3.new(io: @data).compute_part_1!
   end
 
-  # def test_returns_five_for_the_given_data
-  #   assert_equal 5, Day1.new(io: @data).compute_part_2!
-  # end
+  def test_returns_230_for_part_2
+    assert_equal 230, Day3.new(io: @data).compute_part_2!
+  end
 end
