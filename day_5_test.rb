@@ -10,7 +10,7 @@ class Day5LineTest < MiniTest::Test
       Day5::Coordinates.new(x: 0, y: 0),
       Day5::Coordinates.new(x: 0, y: 1),
       Day5::Coordinates.new(x: 0, y: 2),
-      Day5::Coordinates.new(x: 0, y: 3),
+      Day5::Coordinates.new(x: 0, y: 3)
     ]
 
     line = Day5::Line.new(from: Day5::Coordinates.new(x: 0, y: 0), to: Day5::Coordinates.new(x: 0, y: 3))
@@ -22,14 +22,35 @@ class Day5LineTest < MiniTest::Test
       Day5::Coordinates.new(x: 0, y: 0),
       Day5::Coordinates.new(x: 1, y: 0),
       Day5::Coordinates.new(x: 2, y: 0),
-      Day5::Coordinates.new(x: 3, y: 0),
+      Day5::Coordinates.new(x: 3, y: 0)
     ]
 
     line = Day5::Line.new(from: Day5::Coordinates.new(x: 0, y: 0), to: Day5::Coordinates.new(x: 3, y: 0))
     assert_equal expected, line.draw
   end
-end
 
+  def test_draw_diagonal_line_1
+    expected = [
+      Day5::Coordinates.new(x: 0, y: 0),
+      Day5::Coordinates.new(x: 1, y: 1),
+      Day5::Coordinates.new(x: 2, y: 2)
+    ]
+
+    line = Day5::Line.new(from: Day5::Coordinates.new(x: 0, y: 0), to: Day5::Coordinates.new(x: 2, y: 2))
+    assert_equal expected, line.draw(with_diagonals: true)
+  end
+
+  def test_draw_diagonal_line2_
+    expected = [
+      Day5::Coordinates.new(x: 7, y: 9),
+      Day5::Coordinates.new(x: 8, y: 8),
+      Day5::Coordinates.new(x: 9, y: 7)
+    ]
+
+    line = Day5::Line.new(from: Day5::Coordinates.new(x: 7, y: 9), to: Day5::Coordinates.new(x: 9, y: 7))
+    assert_equal expected, line.draw(with_diagonals: true)
+  end
+end
 
 class Day5Test < MiniTest::Test
   DATA = <<~TEXT
@@ -49,12 +70,11 @@ class Day5Test < MiniTest::Test
     @data = StringIO.new(DATA)
   end
 
-  def test_returns_5_points_where_two_lines_overlap
+  def test_returns_5_points_where_two_lines_horizontal_or_vertical_lines_overlap
     assert_equal 5, Day5.new(io: @data).compute_part_1!
   end
 
-  # def test_returns_1924_score_for_the_last_board_to_win
-  #   expected = 1924
-  #   assert_equal expected, Day4.new(io: @data).compute_part_2!
-  # end
+  def test_returns_12_points_where_two_lines_horizontal_vertical_or_diagonal_lines_overlap
+    assert_equal 12, Day5.new(io: @data).compute_part_2!
+  end
 end
