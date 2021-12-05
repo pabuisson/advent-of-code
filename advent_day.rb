@@ -20,15 +20,15 @@ class AdventDay
   end
 
   def data_file
-    File.open(filename)
+    File.open(data_filename)
   rescue Errno::ENOENT => e
-    puts "Expected to find data file #{filename}, but it does not exist"
+    puts "Expected to find data file #{data_filename}, but it does not exist"
   end
 
-  def filename
+  def data_filename
     camel_case_full_class = self.class.name
     camel_case_class = camel_case_full_class.split('::').last
     snake_case_class = camel_case_class.gsub(/(.)([[:upper:]]|\d)/, '\1_\2').downcase
-    "#{snake_case_class}.txt"
+    "data/#{snake_case_class}.txt"
   end
 end
