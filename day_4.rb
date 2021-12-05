@@ -3,9 +3,15 @@
 require './advent_day.rb'
 
 class Day4 < AdventDay
+  attr_reader :draw, :boards
+
+  def initialize(io: data_file)
+    super
+    @draw = initialize_draw(data: data)
+    @boards = initialize_boards(data: data)
+  end
+
   def compute_part_1!
-    draw = initialize_draw(data: data)
-    boards = initialize_boards(data: data)
     winning_score = 0
 
     draw.each do |number_called|
@@ -22,6 +28,20 @@ class Day4 < AdventDay
   end
 
   def compute_part_2!
+    winning_score = 0
+
+    draw.each do |number_called|
+      boards.each { |b| b.mark!(number_called) }
+      winning_boards = boards.select(&:winner?)
+      winning_boards.each { |winning_board| boards.delete(winning_board) } if winning_boards.any?
+
+      if boards.empty?
+        winning_score = winning_boards.first.score(number_called)
+        break
+      end
+    end
+
+    winning_score
   end
 
   private
@@ -99,10 +119,5 @@ class Day4 < AdventDay
         lines.map { |line| line[col_index] }.all?(&:marked?)
       end
     end
-
-  end
-
-  class BoardNumber
-
   end
 end

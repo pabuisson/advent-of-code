@@ -65,4 +65,9 @@ class Day4Test < MiniTest::Test
     expected = 4_512
     assert_equal expected, Day4.new(io: @data).compute_part_1!
   end
+
+  def test_returns_1924_score_for_the_last_board_to_win
+    expected = 1924
+    assert_equal expected, Day4.new(io: @data).compute_part_2!
+  end
 end
