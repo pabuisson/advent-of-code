@@ -20,7 +20,7 @@ class Day9Test < MiniTest::Test
     assert_equal 15, Day9.new(io: @data).compute_part_1!
   end
 
-  # def test_returns_61229_for_output_value_of_each_entry
-  #   assert_equal 61_229, Day8.new(io: @data).compute_part_2!
-  # end
+  def test_returns_1134_three_largest_basin_sizes_multiplied
+    assert_equal 1_134, Day9.new(io: @data).compute_part_2!
+  end
 end
