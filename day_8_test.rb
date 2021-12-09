@@ -25,8 +25,19 @@ class Day8Test < MiniTest::Test
     assert_equal 26, Day8.new(io: @data).compute_part_1!
   end
 
-  # def test_returns_168_fuel_for_least_consuming_move_in_part_2
-  #   skip
-  #   assert_equal 168, Day8.new(io: @data).compute_part_2!
-  # end
+  def test_returns_61229_for_output_value_of_each_entry
+    assert_equal 61_229, Day8.new(io: @data).compute_part_2!
+  end
+end
+
+class Day8PatternsUntanglerTest < MiniTest::Test
+  DATA = 'acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf'
+
+  def test_expected_mapping_is_found_from_the_input
+    patterns = DATA.split('|').first.split(' ')
+    decryptor = Day8::Part2::PatternsUntangler.new(patterns: patterns)
+
+    expected_mapping = { a: 'd', b: 'e', c: 'a', d: 'f', e: 'g', f: 'b', g: 'c' }
+    assert_equal expected_mapping, decryptor.decrypt
+  end
 end
