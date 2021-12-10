@@ -25,6 +25,12 @@ class Day10Test < MiniTest::Test
     assert_equal 26_397, Day10.new(io: @data).compute_part_1!
   end
 
-  def test_returns_1134_three_largest_basin_sizes_multiplied
+  def test_returns_correct_points_for_the_5_incomplete_lines
+    expected = [288_957, 5566, 1_480_781, 995_444, 294]
+    assert_equal expected, Day10.new(io: @data).part_2_scores
+  end
+
+  def test_returns_288957_final_score_for_the_5_incomplete_lines
+    assert_equal 288_957, Day10.new(io: @data).compute_part_2!
   end
 end
