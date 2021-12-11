@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'debug'
+
 class AdventDay
   def initialize(io: data_file)
     @data = format_data(io: io)
