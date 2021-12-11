@@ -25,7 +25,7 @@ class Day11Test < MiniTest::Test
     assert_equal 1_656, Day11.new(io: @data).compute_part_1!
   end
 
-  def test_returns_288957_final_score_for_the_5_incomplete_lines
-    assert false
+  def test_returns_step_195_where_all_octopuses_flashed_together
+    assert_equal 195, Day11.new(io: @data).compute_part_2!
   end
 end

@@ -22,6 +22,22 @@ class Day11 < AdventDay
   end
 
   def compute_part_2!
+    octomap = Octomap.new(data: data)
+
+    # 10_000: arbitrary max to avoid an infinite loop
+    (1..10_000).each do |step|
+      flashed_at_step = 0
+      octomap.reset_flash_status!
+      octomap.increment_all_energy!
+
+      loop do
+        flashed = octomap.flash_loaded_octopuses!
+        flashed_at_step += flashed
+        break if flashed.zero?
+      end
+
+      return step if octomap.all_flashed?
+    end
   end
 
   private
@@ -70,6 +86,12 @@ class Day11 < AdventDay
       end
 
       flashed_count
+    end
+
+    def all_flashed?
+      octomap.all? do |row|
+        row.all?(&:flashed?)
+      end
     end
 
     def print
