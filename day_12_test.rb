@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
+require 'minitest/focus'
 require './day_12'
 
 class Day12NodeTest < MiniTest::Test
@@ -59,7 +60,6 @@ class Day12Test < MiniTest::Test
     start-RW
   TEXT
 
-
   def setup
     @data_1 = StringIO.new(DATA_1)
     @data_2 = StringIO.new(DATA_2)
@@ -88,7 +88,15 @@ class Day12Test < MiniTest::Test
     assert_equal 226, Day12.new(io: @data_3).compute_part_1!
   end
 
-  def test_part_2
-    skip 'part 2'
+  def test_returns_36_in_first_part_2_example
+    assert_equal 36, Day12.new(io: @data_1).compute_part_2!
+  end
+
+  def test_returns_103_in_second_part_2_example
+    assert_equal 103, Day12.new(io: @data_2).compute_part_2!
+  end
+
+  def test_returns_3509_in_third_part_2_example
+    assert_equal 3509, Day12.new(io: @data_3).compute_part_2!
   end
 end
