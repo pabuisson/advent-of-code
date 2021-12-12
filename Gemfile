@@ -6,3 +6,5 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'debug', '>= 1.0.0'
 gem 'minitest'
+gem 'minitest-focus'
+gem 'ruby-prof'
