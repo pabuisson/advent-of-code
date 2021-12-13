@@ -19,9 +19,37 @@ class Day13 < AdventDay
   end
 
   def compute_part_2!
+    points = initialize_points(data: data)
+    instructions = initialize_fold_instructions(data: data)
+
+    instructions.each do |fold_instruction|
+      points.each do |point|
+        point.move_at_fold!(fold: fold_instruction) if point.will_move_at_fold?(fold: fold_instruction)
+      end
+    end
+
+    puts 'After all folds, transparent sheet looks like this:'
+    puts
+    print_sheet(points: points)
+
+    points.uniq.count
   end
 
   private
+
+  def print_sheet(points:)
+    x_max = points.max_by(&:x).x
+    y_max = points.max_by(&:y).y
+
+    (0..y_max).each do |current_y|
+      line =
+        (0..x_max).map do |current_x|
+          points.any? { |p| p.x == current_x && p.y == current_y } ? '#' : ' '
+        end
+
+      puts line.join('')
+    end
+  end
 
   def initialize_points(data:)
     data

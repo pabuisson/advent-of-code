@@ -37,7 +37,7 @@ class Day12Test < MiniTest::Test
     assert_equal 17, Day13.new(io: @data).compute_part_1!
   end
 
-  def test_returns_xxx_after_second_fold
-    skip
+  def test_returns_16_dots_after_all_folds
+    assert_equal 16, Day13.new(io: @data).compute_part_2!
   end
 end
