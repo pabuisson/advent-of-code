@@ -35,7 +35,6 @@ class Day14Test < MiniTest::Test
   end
 
   def test_returns_2188189693529_after_40_steps
-    skip
     assert_equal 2_188_189_693_529, Day14.new(io: @data).compute_part_2!
   end
 end
