@@ -23,11 +23,11 @@ class Day15Test < MiniTest::Test
   end
 
   def test_returns_less_risky_path_of_40
+    skip
     assert_equal 40, Day15.new(io: @data).compute_part_1!
   end
 
   def test_returns_2188189693529_after_40_steps
-    skip
-    assert_equal 40, Day15.new(io: @data).compute_part_2!
+    assert_equal 315, Day15.new(io: @data).compute_part_2!
   end
 end

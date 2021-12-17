@@ -3,83 +3,108 @@
 require './advent_day.rb'
 
 class Day15 < AdventDay
-  # def compute_part_1
-  #   map = initialize_map(data: data)
-  #   # TODO: try a BFS instead, with no heuristic?
-  # end
-
   def compute_part_1!
-    map = initialize_map(data: data)
-
-    closed_list = []
-    opened_list = [map[0][0]]
-
-    while opened_list.any?
-      processed_node = opened_list.sort_by!(&:fcost).shift
-
-      if processed_node.end?
-        print_map(map: map)
-        puts "🥳 Arrived to the final node! #{processed_node.gcost}"
-        break
-      end
-
-      processed_node.neighbors(map: map).each do |neighbor|
-        exists_in_closed_list = closed_list.any? { |node| node.x == neighbor.x && node.y == neighbor.y }
-        next if exists_in_closed_list
-
-        neighbor.gcost = processed_node.gcost + neighbor.risk
-        neighbor.hcost = hcost(from: neighbor, to: map[9][9], map: map)
-
-        puts "from: #{processed_node}, to: #{neighbor}, hcost = #{neighbor.hcost}"
-
-        # If new path of neighbor is shorter
-        # Or neighbor not in open list
-        same_node_in_open_list = opened_list.find { |open| open.x == neighbor.x && open.y == neighbor.y }
-        if same_node_in_open_list.nil? || neighbor.gcost < same_node_in_open_list.gcost
-          if same_node_in_open_list
-            same_node_in_open_list.gcost = neighbor.gcost
-            same_node_in_open_list.hcost = neighbor.hcost
-          else
-            opened_list << neighbor
-          end
-        end
-      end
-
-      closed_list << processed_node
-    end
+    cave = Cave.new(data: data)
+    dijkstra(cave: cave)
   end
 
   def compute_part_2!
+    cave = CavePart2.new(data: data)
+    dijkstra(cave: cave)
   end
 
   private
 
-  def hcost(from:, to:, map:)
-    (to.x - from.x)**2 + (to.y - from.y)**2
+  def dijkstra(cave:)
+    visited_nodes = {}
+    nodes_to_visit = { cave.start_point => PathNode.new(point: cave.start_point, parent: nil, path_risk: 0) }
+
+    while nodes_to_visit.any?
+      less_risky_node_to_visit = nodes_to_visit.min_by { |_, path_node| path_node.path_risk }
+      processed_node = nodes_to_visit.delete(less_risky_node_to_visit.first)
+
+      processed_node.point.neighbors(map: cave.map).each do |neighbor|
+        next if visited_nodes.key?(neighbor)
+
+        neighbor_path_risk = processed_node.path_risk + neighbor.risk
+
+        if (former_node = nodes_to_visit[neighbor])
+          if former_node.path_risk > neighbor_path_risk
+            former_node.update(parent: processed_node, path_risk: neighbor_path_risk)
+          end
+        else
+          nodes_to_visit[neighbor] =
+            PathNode.new(point: neighbor, parent: processed_node, path_risk: neighbor_path_risk)
+        end
+      end
+
+      visited_nodes[processed_node.point] = processed_node
+      puts "Visited: #{visited_nodes.size} / To visit: #{nodes_to_visit.size}" if (visited_nodes.size % 1000).zero?
+    end
+
+    visited_nodes[cave.end_point].path_risk
   end
 
-  def print_map(map:)
-    puts
-    map.each_with_index do |line|
-      puts line.map { ''.center(7) }.join('|') + '|'
-      puts line.map { |node| node.risk.to_s.center(7) }.join('|') + '|'
-      puts line.map { ''.center(7) }.join('|') + '|'
-      puts line.map { |node| "#{node.gcost.to_s.rjust(3)},#{node.hcost.to_s.rjust(3)}" }.join('|') + '|'
-      puts line.map { ''.center(7) }.join('|') + '|'
-      puts line.map { '--------' }.join('') + '-'
+  class Cave
+    attr_reader :map
+
+    def initialize(data:)
+      @map =
+        data.map.with_index do |line, y|
+          line.chars.map.with_index do |risk, x|
+            Point.new(x: x, y: y, risk: risk.to_i)
+          end
+        end
+      @max_rows = @map.size
+      @max_cols = @map.first.size
+    end
+
+    def start_point
+      @map[0][0]
+    end
+
+    def end_point
+      @map[@max_rows - 1][@max_cols - 1]
+    end
+
+    def nodes_count
+      @max_rows * @max_cols
     end
   end
 
-  class Node
-    attr_accessor :gcost, :hcost
+  class CavePart2 < Cave
+    def initialize(data:)
+      @map = []
+      data_rows = data.size
+      data_cols = data.first.size
+
+      5.times do |i|
+        data.each.with_index do |line, y|
+          new_line = []
+          5.times do |j|
+            new_line += line.chars.map.with_index do |risk, x|
+              row = i * data_rows + y
+              col = j * data_cols + x
+              Point.new(x: col, y: row, risk: risk.to_i + i + j)
+            end
+          end
+
+          @map << new_line
+        end
+      end
+
+      @max_rows = @map.size
+      @max_cols = @map.first.size
+    end
+  end
+
+  class Point
     attr_reader :x, :y, :risk
 
-    def initialize(x:, y:, risk:, gcost: 0, hcost: 0)
+    def initialize(x:, y:, risk:)
       @x = x
       @y = y
-      @risk = risk
-      @gcost = gcost
-      @hcost = hcost
+      @risk = risk > 9 ? risk % 9 : risk
     end
 
     def neighbors(map:)
@@ -92,26 +117,42 @@ class Day15 < AdventDay
       neighbors
     end
 
-    def fcost
-      return -1 if gcost.nil? || hcost.nil?
-
-      gcost + hcost
+    # For array include?
+    def ==(other)
+      x == other.x && y == other.y
     end
 
-    def end?
-      x == 9 && y == 9
+    # For hash check
+    def eql?(other)
+      x == other.x && y == other.y
+    end
+
+    # For hash check
+    def hash
+      x * 10_000 + y
     end
 
     def to_s
-      "x=#{x},y=#{y} :: risk=#{risk}"
+      "x:#{x}, y:#{y}, risk: #{risk}"
     end
   end
 
-  def initialize_map(data:)
-    data.map.with_index do |line, y|
-      line.chars.map.with_index do |risk, x|
-        Node.new(x: x, y: y, risk: risk.to_i)
-      end
+  class PathNode
+    attr_accessor :point, :parent, :path_risk
+
+    def initialize(point:, parent:, path_risk:)
+      @point = point
+      @parent = parent
+      @path_risk = path_risk
+    end
+
+    def update(parent:, path_risk:)
+      self.parent = parent
+      self.path_risk = path_risk
+    end
+
+    def to_s
+      "Point(#{point}), risk: #{path_risk}"
     end
   end
 end
