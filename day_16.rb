@@ -9,6 +9,8 @@ class Day16 < AdventDay
   end
 
   def compute_part_2!
+    packet = Packet.new(hexa: data.first)
+    packet.value
   end
 
   private
@@ -18,6 +20,16 @@ class Day16 < AdventDay
       :version, :type_id, :length_type_id,
       :value, :subpackets, :remaining_bits
 
+    module TypeID
+      SUM = 0
+      PRODUCT = 1
+      MINIMUM = 2
+      MAXIMUM = 3
+      LITERAL = 4
+      GREATER_THAN = 5
+      LESS_THAN = 6
+      EQUAL_TO = 7
+    end
 
     def initialize(hexa: nil, binary: nil)
       if hexa
@@ -34,7 +46,6 @@ class Day16 < AdventDay
       parse(binary: @binary)
     end
 
-    LITERAL_TYPE_ID = 4
     BITS_FOR_NUMBER_OF_SUBPACKETS_BITS = 15
     BITS_FOR_NUMBER_OF_SUBPACKETS = 11
 
@@ -43,7 +54,7 @@ class Day16 < AdventDay
       @version = binary_chars.shift(3).join('').to_i(2)
       @type_id = binary_chars.shift(3).join('').to_i(2)
 
-      if @type_id == LITERAL_TYPE_ID
+      if @type_id == TypeID::LITERAL
         @value, @remaining_bits = parse_literal_value(binary: binary_chars.join(''))
       else
         @length_type_id = binary_chars.shift.to_i
@@ -53,6 +64,19 @@ class Day16 < AdventDay
 
     def self_and_subpackets
       [self] + @subpackets.flat_map(&:self_and_subpackets)
+    end
+
+    def value
+      case @type_id
+      when TypeID::LITERAL then @value
+      when TypeID::SUM then subpackets.sum(&:value)
+      when TypeID::PRODUCT then subpackets.map(&:value).reduce(:*)
+      when TypeID::MINIMUM then subpackets.map(&:value).min
+      when TypeID::MAXIMUM then subpackets.map(&:value).max
+      when TypeID::GREATER_THAN then greater_than?
+      when TypeID::LESS_THAN then less_than?
+      when TypeID::EQUAL_TO then equality?
+      end
     end
 
     private
@@ -102,6 +126,7 @@ class Day16 < AdventDay
     end
 
     LAST_VALUE_LEADING_CHAR = '0'
+
     def parse_literal_value(binary:)
       concatenated_values = []
       binary_chars = binary.chars
@@ -117,6 +142,21 @@ class Day16 < AdventDay
       literal_value = concatenated_values.join('').to_i(2)
       remaining_bits = binary_chars.join('')
       [literal_value, remaining_bits]
+    end
+
+    def equality?
+      return 0 unless subpackets.size == 2
+      subpackets.first.value == subpackets.last.value ? 1 : 0
+    end
+
+    def greater_than?
+      return 0 unless subpackets.size == 2
+      subpackets.first.value > subpackets.last.value ? 1 : 0
+    end
+
+    def less_than?
+      return 0 unless subpackets.size == 2
+      subpackets.first.value < subpackets.last.value ? 1 : 0
     end
   end
 end
