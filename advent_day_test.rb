@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
-require './advent_day.rb'
+require './test_helper'
+require './advent_day'
 
 class AdventDayTest < MiniTest::Test
   class SomeTest1 < AdventDay

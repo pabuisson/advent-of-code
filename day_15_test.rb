@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
-require 'minitest/focus'
+require './test_helper'
 require './day_15'
 
 class Day15Test < MiniTest::Test

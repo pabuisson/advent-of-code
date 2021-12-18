@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
+require './test_helper'
 require './day_4'
-
 
 class Day4BoardTest < MiniTest::Test
   def test_winner_returns_true_for_board_with_marked_column
