@@ -9,28 +9,22 @@ defmodule Day01 do
     input
     |> format
     |> Enum.sort
-    |> Enum.reverse
-    |> Enum.take(3)
+    |> Enum.take(-3)
     |> Enum.sum
   end
 
   defp format(input) do
     input
     |> String.split("\n")
-    |> Enum.map(fn(x) -> if x == "" do x else String.to_integer(x) end end)
-    |> Enum.reduce([], fn(x, acc) -> reduce_fn(acc, x) end)
+    |> Enum.reduce([], &reduce_fn(&1, &2))
   end
 
-  defp reduce_fn([], x), do: [x]
-  defp reduce_fn(acc, x) do
-    if x == "" do
-      [0 | acc]
-    else
-      [head | tail] = acc
-      [head + x | tail]
-    end
+  defp reduce_fn(x, []), do: [String.to_integer(x)]
+  defp reduce_fn("", acc), do: [0 | acc]
+  defp reduce_fn(x, acc) do
+    [head | tail] = acc
+    [head + String.to_integer(x) | tail]
   end
-
 end
 
 ExUnit.start()

@@ -17,7 +17,7 @@ defmodule Day02 do
   defp format(input) do
     input
     |> String.split("\n", trim: true)
-    |> Enum.map(fn(couple) -> couple |> String.split(" ") end)
+    |> Enum.map(&String.split(&1, " "))
   end
 
   defp score([_, _] = couple) do
