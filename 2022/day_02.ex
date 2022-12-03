@@ -43,7 +43,7 @@ end
 
 
 ExUnit.start(exclude: [:skip])
-defmodule Day02Part1Test do
+defmodule Day02Test do
   use ExUnit.Case
 
   setup_all do
