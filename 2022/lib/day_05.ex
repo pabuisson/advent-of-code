@@ -8,7 +8,7 @@ defmodule Day05 do
         |> Enum.with_index
         |> Enum.map(fn({current_stack, current_index}) ->
           source_stack = Enum.at(stacks, from_index)
-          one_by_one_mover(current_stack, current_index, source_stack, current_move)
+          move_one_by_one(current_stack, current_index, source_stack, current_move)
         end)
       end)
     end)
@@ -16,7 +16,7 @@ defmodule Day05 do
     |> List.to_string
   end
 
-  defp one_by_one_mover(current_stack, current_index, source_stack, %{from_index: from_index, to_index: target_index}) do
+  defp move_one_by_one(current_stack, current_index, source_stack, %{from_index: from_index, to_index: target_index}) do
     cond do
       current_index == from_index -> tl(current_stack)
       current_index == target_index -> [hd(source_stack) | current_stack]
@@ -32,14 +32,14 @@ defmodule Day05 do
       |> Enum.with_index
       |> Enum.map(fn({current_stack, current_index}) ->
           source_stack = Enum.at(stacks, from_index)
-          batch_mover(current_stack, current_index, source_stack, current_move)
+          move_in_batches(current_stack, current_index, source_stack, current_move)
       end)
     end)
     |> Enum.map(&hd(&1))
     |> List.to_string
   end
 
-  defp batch_mover(current_stack, current_index, source_stack, %{move: number_of_crates_to_move, from_index: from_index, to_index: target_index}) do
+  defp move_in_batches(current_stack, current_index, source_stack, %{move: number_of_crates_to_move, from_index: from_index, to_index: target_index}) do
     cond do
       current_index == from_index -> remove_first_elements(current_stack, number_of_crates_to_move)
       current_index == target_index ->
