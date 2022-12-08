@@ -1,0 +1,13 @@
+name: aoc-2022-crystal
+version: 0.1.0
+
+authors:
+  - Pierre-Adrien <pabuisson@gmail.com>
+
+targets:
+  aoc-2022-crystal:
+    main: src/aoc-2022-crystal.cr
+
+crystal: 1.6.2
+
+license: MIT
