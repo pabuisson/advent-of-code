@@ -1,7 +1,7 @@
 require "./spec_helper"
 require "../src/day_09.cr"
 
-describe Aoc2022::Day09, focus: true do
+describe Aoc2022::Day09 do
   describe "part 1" do
     it "test data" do
       test_data = File.read("./data/day_09_test_part_1.txt")
