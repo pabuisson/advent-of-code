@@ -17,7 +17,7 @@ describe Aoc2022::Day09 do
     end
   end
 
-  describe "part 2", focus: true do
+  describe "part 2" do
     it "test data" do
       test_data = File.read("./data/day_09_test_part_1.txt")
       result = Aoc2022::Day09.part_2(input: test_data)
