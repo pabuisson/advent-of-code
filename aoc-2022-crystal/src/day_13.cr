@@ -21,29 +21,21 @@ class Aoc2022::Day13
       @right = JSON.parse(right_string)
     end
 
-    def right_order?(left_json_array = @left, right_json_array = @right)
-      pp left_json_array
+    def right_order?(
+      left_json_array : JSON::Any = @left,
+      right_json_array : JSON::Any = @right
+    )
       left_json_array.as_a.each_with_index do |l, i|
         r = right_json_array.as_a[i]
 
-        l_value =
-          begin
-            l.as_i
-          rescue
-            l.as_a
-          end
-
-        r_value =
-          begin
-            r.as_i
-          rescue
-            r.as_a
-          end
-
-        begin
-          return 0 if l_value > r_value
-        rescue
-          right_order?(left_json_array: l_value, right_json_array: r_value)
+        if l.as_i? && r.as_i?
+          return 0 if l.as_i > r.as_i
+        elsif l.as_i? && !r.as_i?
+          right_order?(left_json_array: JSON.parse("[#{l.as_i}]"), right_json_array: r.as_a)
+        elsif !l.as_i? && r.as_i?
+          right_order?(left_json_array: l.as_a, right_json_array: JSON.parse("[#{r.as_i}]"))
+        else
+          right_order?(left_json_array: l.as_a, right_json_array: r.as_a)
         end
       end
 
