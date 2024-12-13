@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
-require 'rake/testtask'
+require 'minitest/test_task'
 
-Rake::TestTask.new(:test) do |t|
-  t.test_files = FileList['*_test.rb']
+Minitest::TestTask.create(:test) do |t|
+  # t.libs << "test"
+  # t.libs << "lib"
+  t.warning = false
+  t.test_globs = ["*_test.rb"]
 end
 
-task default: :test
+task :default => :test
