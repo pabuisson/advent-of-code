@@ -30,10 +30,6 @@ class Day05 < AdventDay
       @update = update
     end
 
-    def include?(value)
-      update.include?(value)
-    end
-
     def correct?(rules)
       is_correct = true
 
@@ -71,9 +67,7 @@ class Day05 < AdventDay
       Update.new(reordered_update)
     end
 
-    def middle_value
-      update[(update.size - 1) / 2]
-    end
+    def middle_value = update[(update.size - 1) / 2]
 
     private
 
@@ -102,7 +96,5 @@ class Day05 < AdventDay
         end
       end
     end
-
-    private 
   end
 end
