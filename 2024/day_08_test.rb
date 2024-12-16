@@ -26,7 +26,7 @@ describe Day08 do
       assert_equal 14, Day08.new(io: @data).part_1!
     end
 
-    describe 'antinode_positions' do
+    describe 'antinode_locations_for' do
       it 'returns expected values for NO-SE ╲ positions' do
         p1 = Day08::Position.new(line: 2, col: 4)
         p2 = Day08::Position.new(line: 4, col: 7)
@@ -35,10 +35,10 @@ describe Day08 do
           Day08::Position.new(line: 6, col: 10),
         ]
 
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p1, p2)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p1, p2)
 
         @data.rewind
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p2, p1)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p2, p1)
       end
 
       it 'returns expected values for SO-NE ╱ positions' do
@@ -49,10 +49,10 @@ describe Day08 do
           Day08::Position.new(line: 2, col: 9),
         ]
 
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p1, p2)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p1, p2)
 
         @data.rewind
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p2, p1)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p2, p1)
       end
 
       it 'returns expected values for vertical positions' do
@@ -63,10 +63,10 @@ describe Day08 do
           Day08::Position.new(line: 5, col: 1),
         ]
 
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p1, p2)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p1, p2)
 
         @data.rewind
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p2, p1)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p2, p1)
       end
 
       it 'returns expected values for horizontal positions' do
@@ -77,20 +77,20 @@ describe Day08 do
           Day08::Position.new(line: 4, col: 7),
         ]
 
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p1, p2)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p1, p2)
 
         @data.rewind
-        assert_same_arrays expected, Day08::Map.new(@data).antinode_positions(p2, p1)
+        assert_same_arrays expected, Day08::Map.new(@data).antinode_locations_for(p2, p1)
       end
 
       it 'does not return values that are outside the map' do
         p1 = Day08::Position.new(line: 0, col: 0)
         p2 = Day08::Position.new(line: @data.size - 1, col: @data.first.size - 1)
 
-        assert_same_arrays [], Day08::Map.new(@data).antinode_positions(p1, p2)
+        assert_same_arrays [], Day08::Map.new(@data).antinode_locations_for(p1, p2)
 
         @data.rewind
-        assert_same_arrays [], Day08::Map.new(@data).antinode_positions(p2, p1)
+        assert_same_arrays [], Day08::Map.new(@data).antinode_locations_for(p2, p1)
       end
     end
   end

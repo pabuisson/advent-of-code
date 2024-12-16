@@ -36,6 +36,51 @@ class Day08 < AdventDay
       end
     end
 
+    def all_antinode_locations(repeated: false)
+      antennas
+        .group_by(&:code)
+        .flat_map do |_code, positions|
+          positions
+            .map(&:position)
+            .permutation(2)
+            .flat_map { |permutation| antinode_locations_for(permutation.first, permutation.last, repeated:) }
+            .compact
+        end.uniq
+    end
+
+    def antinode_locations_for(p1, p2, repeated: false)
+      delta_line = (p1.line - p2.line).abs
+      delta_col = (p1.col - p2.col).abs
+
+      left_point = [p1, p2].min_by(&:col)
+      right_point = ([p1, p2] - [left_point]).first
+
+      is_left_point_above = left_point.line < right_point.line
+      range = repeated ? (1..10000) : (1..1)
+
+      # Pretty nice to use a lazy enumator + take_while, which, in this case,
+      # is also really easy to understand because it maps exactly with what I'm doing
+      candidates_left =
+        range.lazy.map do |i|
+          new_candidate_left = Position.new(
+            col: left_point.col - i * delta_col,
+            line: is_left_point_above ? left_point.line - i * delta_line : left_point.line + i * delta_line
+          )
+        end.take_while { valid?(_1) }.to_a
+
+      # Pretty nice to use a lazy enumator + take_while, which, in this case,
+      # is also really easy to understand because it maps exactly with what I'm doing
+      candidates_right =
+        range.lazy.map do |i|
+          new_candidate_right = Position.new(
+            col: right_point.col + i * delta_col,
+            line: is_left_point_above ? right_point.line + i * delta_line : right_point.line - i * delta_line
+          )
+        end.take_while { valid?(_1) }.to_a
+
+      (candidates_left || []) + (candidates_right || []) + (repeated ? [p1, p2] : [])
+    end
+
     def draw(repeated: false)
       antinodes = all_antinode_locations(repeated:)
 
@@ -54,53 +99,12 @@ class Day08 < AdventDay
       end
     end
 
-    def all_antinode_locations(repeated: false)
-      antennas
-        .group_by(&:code)
-        .flat_map do |_code, positions|
-          positions
-            .map(&:position)
-            .permutation(2)
-            .flat_map { |permutation| antinode_positions(permutation.first, permutation.last, repeated:) }
-            .compact
-        end.uniq
-    end
+    private
 
-    def antinode_positions(p1, p2, repeated: false)
-      delta_line = (p1.line - p2.line).abs
-      delta_col = (p1.col - p2.col).abs
-
-      left_point = [p1, p2].min_by(&:col)
-      right_point = ([p1, p2] - [left_point]).first
-
-      is_left_point_above = left_point.line < right_point.line
-      range = repeated ? (1..10000) : (1..1)
-
-      candidates_left =
-        range.lazy.map do |i|
-          new_candidate_left = Position.new(
-            col: left_point.col - i * delta_col,
-            line: is_left_point_above ? left_point.line - i * delta_line : left_point.line + i * delta_line
-          )
-        end.take_while { valid?(_1) }.to_a
-
-      candidates_right =
-        range.lazy.map do |i|
-          new_candidate_right = Position.new(
-            col: right_point.col + i * delta_col,
-            line: is_left_point_above ? right_point.line + i * delta_line : right_point.line - i * delta_line
-          )
-        end.take_while { valid?(_1) }.to_a
-
-      (candidates_left || []) + (candidates_right || []) + (repeated ? [p1, p2] : [])
-    end
+    attr_reader :map
 
     def valid?(position)
       position.line.between?(0, map.size - 1) && position.col.between?(0, map.first.size - 1)
     end
-
-    private
-
-    attr_reader :map
   end
 end
