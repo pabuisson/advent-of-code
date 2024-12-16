@@ -3,10 +3,28 @@
 require 'minitest/test_task'
 
 Minitest::TestTask.create(:test) do |t|
-  # t.libs << "test"
-  # t.libs << "lib"
   t.warning = false
   t.test_globs = ["*_test.rb"]
 end
 
 task :default => :test
+
+task :last do
+  last_day_file = Dir.glob('*.rb').reject { _1.include?('test') }.max
+  last_day_klass = last_day_file.gsub("day_", "Day").delete(".rb")
+  puts last_day_file
+  puts last_day_klass
+  require_relative last_day_file
+
+  last_day_instance = Object.const_get(last_day_klass).new
+
+  puts "=== RUNNING #{last_day_klass}, part 1... ==="
+  puts ""
+  puts "=== PART 1 --> #{last_day_instance.part_1!}"
+
+  puts ""
+  puts "=== RUNNING #{last_day_klass}, part 2... ==="
+  puts "=== PART 2 --> #{last_day_instance.part_2!}"
+
+  last_day_instance.part_2!
+end
