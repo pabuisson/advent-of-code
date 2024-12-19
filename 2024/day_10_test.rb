@@ -24,7 +24,6 @@ describe Day10 do
     TEXT
   end
 
-  focus
   it 'finds the expected number of trailheads' do
     Day10.new(io: @small).part_1! => {trailheads_count:}
     assert_equal 1, trailheads_count
@@ -33,19 +32,16 @@ describe Day10 do
     assert_equal 9, trailheads_count
   end
 
-  focus
   it 'returns 36 for part 1' do
     Day10.new(io: @large).part_1! => {trailheads_count: 9, result:}
     assert_equal 36, result
   end
 
-  focus
   it 'returns 81 for part 2' do
     Day10.new(io: @large).part_2! => {trailheads_count: 9, result:}
     assert_equal 81, result
   end
 
-  focus
   it 'returns 227 for part 2 weird example' do
     data = StringIO.new(<<~TEXT)
     012345
