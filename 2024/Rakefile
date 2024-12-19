@@ -19,7 +19,6 @@ task :last do
   last_day_instance = Object.const_get(last_day_klass).new
 
   puts "=== RUNNING #{last_day_klass}, part 1... ==="
-  puts ""
   puts "=== PART 1 --> #{last_day_instance.part_1!}"
 
   puts ""
