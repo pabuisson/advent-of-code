@@ -7,23 +7,31 @@ Minitest::TestTask.create(:test) do |t|
   t.test_globs = ["*_test.rb"]
 end
 
-task :default => :test
-
 task :last do
   last_day_file = Dir.glob('*.rb').reject { _1.include?('test') }.max
   last_day_klass = last_day_file.gsub("day_", "Day").delete(".rb")
-  puts last_day_file
-  puts last_day_klass
   require_relative last_day_file
 
-  last_day_instance = Object.const_get(last_day_klass).new
+  run!(last_day_klass)
+end
 
-  puts "=== RUNNING #{last_day_klass}, part 1... ==="
-  puts "=== PART 1 --> #{last_day_instance.part_1!}"
+task :run, [:day] do |t, args|
+  day_file = Dir.glob('*.rb').reject { _1.include?('test') }.find { _1.start_with?("day_#{args[:day].rjust(2, "0")}") }
+  exit 1 if day_file.nil?
+
+  day_klass = day_file.gsub("day_", "Day").delete(".rb")
+  require_relative day_file
+
+  run!(day_klass)
+end
+
+def run!(day_klass)
+  day_instance = Object.const_get(day_klass).new
+
+  puts "=== RUNNING #{day_klass}, part 1... ==="
+  puts "=== PART 1 --> #{day_instance.part_1!}"
 
   puts ""
-  puts "=== RUNNING #{last_day_klass}, part 2... ==="
-  puts "=== PART 2 --> #{last_day_instance.part_2!}"
-
-  last_day_instance.part_2!
+  puts "=== RUNNING #{day_klass}, part 2... ==="
+  puts "=== PART 2 --> #{day_instance.part_2!}"
 end
