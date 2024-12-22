@@ -35,3 +35,68 @@ def run!(day_klass)
   puts "=== RUNNING #{day_klass}, part 2... ==="
   puts "=== PART 2 --> #{day_instance.part_2!}"
 end
+
+task :init, [:day] do |t, args|
+  file_exists = Dir.glob('*.rb').include?(filename(args[:day])) ||
+    Dir.glob('*.rb').include?(test_filename(args[:day])) ||
+    Dir.glob('data/*.txt').include?(data_filename(args[:day]))
+
+  if file_exists
+    puts "At least one of the file already exists for day #{args[:day]}"
+    exit 1
+  end
+
+  padded_day = args[:day].rjust(2, "0")
+
+  class_template = <<~RUBY
+    # frozen_string_literal: true
+
+    require './advent_day'
+    require 'debug'
+
+    class Day#{padded_day} < AdventDay
+      def part_1! do
+        @data
+      end
+
+      def part_2! do
+        @data
+      end
+    end
+  RUBY
+
+  test_template = <<~RUBY
+    # frozen_string_literal: true
+
+    require './test_helper'
+    require './day_#{padded_day}'
+
+    describe Day#{padded_day} do
+      before do
+        @data = StringIO.new(<<~TEXT)
+        TEXT
+      end
+
+      it 'returns ??? for part 1' do
+        assert_equal nil, Day#{padded_day}.new(io: @data).part_1!
+      end
+
+      it 'returns ??? for part 2' do
+        assert_equal nil, Day#{padded_day}.new(io: @data).part_2!
+      end
+    end
+  RUBY
+
+  # Write the files
+  File.write(filename(args[:day]), class_template)
+  File.write(test_filename(args[:day]), test_template)
+  FileUtils.touch(data_filename(args[:day]))
+
+  puts "Created files for Day #{padded_day}:"
+  puts "- lib/day#{padded_day}.rb"
+  puts "- spec/day#{padded_day}_spec.rb"
+end
+
+def filename(day) = "day_#{day.rjust(2, "0")}.rb"
+def test_filename(day) = "day_#{day.rjust(2, "0")}_test.rb"
+def data_filename(day) = "data/day_#{day.rjust(2, "0")}.txt"
