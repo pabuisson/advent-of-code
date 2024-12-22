@@ -48,6 +48,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.37.0)
       parser (>= 3.3.1.0)
+    ruby-prof (1.7.1)
     ruby-progressbar (1.13.0)
     stringio (3.1.2)
     unicode-display_width (3.1.2)
@@ -64,6 +65,7 @@ DEPENDENCIES
   minitest-focus
   minitest-reporters
   rubocop
+  ruby-prof
 
 BUNDLED WITH
    2.4.6
