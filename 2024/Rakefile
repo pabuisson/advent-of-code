@@ -55,11 +55,11 @@ task :init, [:day] do |t, args|
     require 'debug'
 
     class Day#{padded_day} < AdventDay
-      def part_1! do
+      def part_1!
         @data
       end
 
-      def part_2! do
+      def part_2!
         @data
       end
     end
