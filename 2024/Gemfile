@@ -3,11 +3,14 @@
 source 'https://rubygems.org'
 
 gem 'debug', '>= 1.0.0'
-gem 'minitest'
-gem 'minitest-focus'
-gem 'minitest-reporters'
-
+gem 'paint'
 gem 'ruby-prof'
+
+group :test do
+  gem 'minitest'
+  gem 'minitest-focus'
+  gem 'minitest-reporters'
+end
 
 group :development do
   gem 'rubocop'
