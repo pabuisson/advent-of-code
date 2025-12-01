@@ -1,39 +1,21 @@
-# aoc2025
+# AoC 2025
 
-TODO: Write a description here
+A Crystal project for the Advent of Code 2025. Each day is a class `DayNN` defined in a `src/day_nn.cr` file, and defines both a `part_1(input, must_log)` and `part_2(input, must_log) methods that must return the expected value.
 
-## Installation
+A global `Base` class includes common constants and stuff, along with a macro that allows to run a specific day without needing to add any code to the daily classes. Just run the following commands:
 
-1. Add the dependency to your `shard.yml`:
-
-   ```yaml
-   dependencies:
-     aoc2025:
-       github: your-github-user/2025
-   ```
-
-2. Run `shards install`
-
-## Usage
-
-```crystal
-require "aoc2025"
+```shell
+$ crystal run src/day_nn.cr
 ```
 
-TODO: Write usage instructions here
+Or if you want the verbose mode:
 
-## Development
+```shell
+$ crystal run src/day_nn.cr -- -v
+$ crystal run src/day_nn.cr -- --verbose
+```
 
-TODO: Write development instructions here
-
-## Contributing
-
-1. Fork it (<https://github.com/your-github-user/2025/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
 
 ## Contributors
 
-- [Pierre-Adrien Buisson](https://github.com/your-github-user) - creator and maintainer
+- [Pierre-Adrien Buisson](https://github.com/pabuisson) - creator and maintainer
