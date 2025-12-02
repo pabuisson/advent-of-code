@@ -24,9 +24,15 @@ class Base
       end
 
       puts "-" * 50
-      puts "🌲 Part 1: #{ {{ @type }}.part_1(input, must_log: must_log)}".center(50)
+
+      res_part_1 = {{ @type }}.part_1(input, must_log: must_log)
       puts "-" * 50
-      puts "🎄 Part 2: #{ {{ @type }}.part_2(input, must_log: must_log)}".center(50)
+      puts "| " + "🌲 Part 1: #{res_part_1}".center(45) + " |"
+      puts "-" * 50
+
+      res_part_2 = {{ @type }}.part_2(input, must_log: must_log)
+      puts "-" * 50
+      puts "| " + "🎄 Part 2: #{res_part_2}".center(45) + " |"
       puts "-" * 50
     end
   end
