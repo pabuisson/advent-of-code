@@ -66,12 +66,3 @@ class Day01 < Base
       .fetch(:password, nil)
   end
 end
-
-# ----------------------------------------------------
-
-# # Only runs when this file is executed directly
-# if PROGRAM_NAME.includes?("day_01")
-#   input = File.read_lines("data/day_01.txt")
-#   puts "Part 1: #{Day01.part_1(input, must_log: false)}"
-#   puts "Part 2: #{Day01.part_2(input, must_log: false)}"
-# end

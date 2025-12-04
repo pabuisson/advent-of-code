@@ -51,7 +51,7 @@ class Day02 < Base
       .split(",")
       .map { |couple| couple.split("-").map(&.to_i64) }
       .flat_map do |(from, to)|
-        puts "(#{from} – #{to})"
+        puts "(#{from} – #{to})" if must_log
 
         (from..to)
           .map { |n| Number.new(n) }
@@ -67,7 +67,7 @@ class Day02 < Base
       .split(",")
       .map { |couple| couple.split("-").map(&.to_i64) }
       .flat_map do |(from, to)|
-        puts "(#{from} – #{to})"
+        puts "(#{from} – #{to})" if must_log
 
         (from..to)
           .map { |n| Number.new(n) }
