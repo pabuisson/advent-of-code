@@ -216,7 +216,7 @@ describe Day05, tags: "day_05" do
       end
     end
 
-    it "works with example data", tags: "focus" do
+    it "works with example data" do
       test_data = File.read_lines("./data/day_05_test.txt")
       Day05.part_2(test_data, must_log: false).should eq 14
     end
