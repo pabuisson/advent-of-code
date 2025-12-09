@@ -24,7 +24,7 @@ describe Day04, tags: "day_04" do
 
     it "works with normal data" do
       test_data = File.read_lines("./data/day_04.txt")
-      Day04.part_2(test_data).should eq nil
+      Day04.part_2(test_data).should eq 9_120
     end
   end
 end
